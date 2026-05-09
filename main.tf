@@ -3,14 +3,10 @@ data "aws_vpc" "default" {
   default = true
 }
 
-data "aws_subnets" "available-subnets" {
+data "aws_subnets" "available_subnets" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
-  }
-  filter {
-    name   = "default-for-az"
-    values = ["true"]
   }
 }
 
@@ -20,8 +16,8 @@ resource "aws_eks_cluster" "project-cluster" {
   role_arn = aws_iam_role.example.arn
 
   vpc_config {
-    subnet_ids = data.aws_subnets.available-subnets.ids
-  }
+  subnet_ids = data.aws_subnets.available_subnets.ids
+}
 
   depends_on = [
     aws_iam_role_policy_attachment.example-AmazonEKSClusterPolicy,
